@@ -6,12 +6,27 @@ import {
   ReservationSchema,
 } from './entities/reservation.entity';
 import { ReservationRepository } from './reservation.repository';
-import { DatabaseModule } from '@app/common';
+import { AUTH_SERVICE, DatabaseModule } from '@app/common';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     DatabaseModule.forFeature([
       { name: ReservationDocument.name, schema: ReservationSchema },
+    ]),
+    ClientsModule.registerAsync([
+      {
+        name: AUTH_SERVICE,
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.TCP,
+          options: {
+            host: configService.get('AUTH_HOST'),
+            port: configService.get('AUTH_PORT'),
+          },
+        }),
+        inject: [ConfigService],
+      },
     ]),
   ],
   controllers: [ReservationsController],

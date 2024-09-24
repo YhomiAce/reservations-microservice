@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ReservationsModule } from './reservations/reservations.module';
-import { DatabaseModule, LoggerModule } from '@app/common';
+import { AUTH_SERVICE, DatabaseModule, LoggerModule } from '@app/common';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from "joi";
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import * as Joi from "joi";
     }),
     DatabaseModule,
     ReservationsModule,
-    LoggerModule
+    LoggerModule,
+    
   ],
 })
 export class ReservationsAppModule {}
