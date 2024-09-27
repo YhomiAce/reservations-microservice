@@ -28,6 +28,7 @@ services:
       - mongo
     volumes:
       - .:/usr/src/app
+  
   payment:
     build:
       context: .
@@ -36,10 +37,21 @@ services:
     command: yarn start:dev payments
     env_file:
       - ./apps/payments/.env
-    ports:
-      - '3003:3003'
-    depends_on:
-      - mongo
+    # ports:
+    #   - '3003:3003' // exposed over TCP
+    volumes:
+      - .:/usr/src/app
+
+  notifications:
+    build:
+      context: .
+      dockerfile: ./apps/notifications/Dockerfile
+      target: development
+    command: yarn start:dev notifications
+    env_file:
+      - ./apps/notifications/.env
+    # ports:
+    #   - '3004:3004' not needed. EXPOSED over TCP
     volumes:
       - .:/usr/src/app
 

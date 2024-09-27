@@ -14,12 +14,14 @@ export class ReservationsService {
     private readonly paymentsService: ClientProxy,
   ) {}
   async create(createReservationDto: CreateReservationDto, user: UserDto) {
-    console.log('START');
     return this.paymentsService
-      .send('create_charge', createReservationDto.charge)
+      .send('create_charge', {
+        ...createReservationDto.charge,
+        email: user.email
+      })
       .pipe(
         map(async (response) => {
-          console.log({ response });
+          // console.log({ response });
           const reservation = await this.reservationRepo.create({
             ...createReservationDto,
             timestamp: new Date(),
