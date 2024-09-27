@@ -28,6 +28,20 @@ services:
       - mongo
     volumes:
       - .:/usr/src/app
+  payment:
+    build:
+      context: .
+      dockerfile: ./apps/payments/Dockerfile
+      target: development
+    command: yarn start:dev payments
+    env_file:
+      - ./apps/payments/.env
+    ports:
+      - '3003:3003'
+    depends_on:
+      - mongo
+    volumes:
+      - .:/usr/src/app
 
   mongo:
     image: mongo
